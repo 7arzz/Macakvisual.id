@@ -1,26 +1,88 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Global Design System - MacakVisual.id */
+  --color-brand-dark: #1E1B18;
+  --color-brand-cream: #FDF8F3;
+  --color-brand-surface: #FAF5EF;
+  --color-brand-gold: #C9A84C;
+  --color-brand-gold-muted: #E8D5A0;
+  --color-brand-rose: #D4819A;
+  --color-brand-blush: #FAF0F4;
+  
+  --color-text-primary: #1E1B18;
+  --color-text-muted: #6B5F58;
+  --color-text-subtle: #9E8E7E;
+  --color-border-default: rgba(180,160,140,0.25);
+
+  --font-display: var(--font-outfit), sans-serif;
+  --font-serif: var(--font-playfair), serif;
+  
+  /* Radii System */
+  --radius-wedding-card: 24px;
+  --radius-wedding-button: 10px;
+  --radius-wedding-input: 10px;
+  --radius-wedding-pill: 99px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    @apply bg-brand-cream text-text-primary overflow-x-hidden;
+    font-family: 'Outfit', sans-serif;
+  }
+  
+  h1, h2, h3 {
+    @apply font-serif italic font-normal;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  p {
+    @apply text-text-muted leading-[1.75];
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .section-divider {
+    @apply h-px w-16 bg-brand-gold/40 my-8;
+  }
+  
+  .eyebrow {
+    @apply text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.3em] md:tracking-[0.35em] text-brand-gold mb-6 flex items-center gap-4 md:gap-6 font-display;
+  }
+  
+  .eyebrow::before, .eyebrow::after {
+    content: '';
+    @apply h-px w-4 md:w-6 bg-brand-gold/60;
+  }
+
+  .wedding-card {
+    @apply bg-white border border-border-default rounded-wedding-card transition-all duration-400 ease-out;
+  }
+  
+  .wedding-card:hover {
+    @apply scale-[1.015];
+  }
+
+  .text-fluid-hero {
+    font-size: clamp(2.25rem, 8vw, 4.5rem);
+    line-height: 1.1;
+  }
+  
+  .text-fluid-h2 {
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    line-height: 1.15;
+  }
+
+  /* Responsive Spacing Utilities */
+  .container-responsive {
+    @apply container mx-auto px-6 md:px-12 lg:px-24;
+  }
+
+  /* Animation Overrides */
+  .entrance-transition {
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
 }
