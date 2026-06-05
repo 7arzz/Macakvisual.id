@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
+import Image from "next/image";
 import { X } from "lucide-react";
 import { cn } from "../lib/utils";
 import gambar1 from "../assets/gambar1.jpg";
@@ -82,6 +83,7 @@ const Portfolio = () => {
     <section
       id="portfolio"
       ref={sectionRef}
+      aria-label="Galeri portofolio pernikahan MacakVisual.id"
       className="relative h-[100svh] min-h-[600px] bg-[#141218] overflow-hidden flex flex-col items-center justify-center cursor-grab active:cursor-grabbing select-none touch-pan-y"
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
@@ -89,7 +91,7 @@ const Portfolio = () => {
       onPointerLeave={handlePointerUp}
     >
       {/* Animated Mesh Background */}
-      <div className="absolute inset-0 z-0 opacity-15">
+      <div aria-hidden="true" className="absolute inset-0 z-0 opacity-15">
         <div className="absolute top-0 left-0 w-full h-full bg-linear-to-br from-brand-gold/20 via-transparent to-brand-gold/20 animate-pulse" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[100vw] bg-radial from-brand-gold/10 to-transparent blur-[120px]" />
       </div>
@@ -133,6 +135,9 @@ const Portfolio = () => {
           {portfolio.projects.map((project, index) => (
             <div
               key={project.id}
+              role="button"
+              tabIndex={0}
+              aria-label={`Lihat detail proyek ${project.title}`}
               className={cn(
                 "absolute inset-0 bg-[#1A1714] rounded-wedding-card border border-white/5 shadow-2xl transition-all duration-500 hover:border-brand-gold/40 hover:brightness-110 preserve-3d group cursor-pointer",
                 isInView ? "item-entrance" : "item-exit",
@@ -152,11 +157,19 @@ const Portfolio = () => {
                   setIsRotating(false);
                 }
               }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  setSelectedProject(project);
+                  setIsRotating(false);
+                }
+              }}
             >
-              <img
-                src={gambar1.src}
-                alt={project.title}
-                className="w-full h-full object-cover rounded-wedding-card pointer-events-none"
+              <Image
+                src={gambar1}
+                alt={`Foto pernikahan – ${project.title}`}
+                fill
+                sizes="(max-width: 768px) 180px, 220px"
+                className="object-cover rounded-wedding-card pointer-events-none"
               />
 
               {/* Refined Glass Info Card */}
@@ -183,6 +196,9 @@ const Portfolio = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Detail proyek ${selectedProject.title}`}
             className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-brand-dark/95 backdrop-blur-2xl"
             onClick={() => {
               setSelectedProject(null);
@@ -197,22 +213,25 @@ const Portfolio = () => {
               className="bg-[#1A1714] border border-brand-gold/15 rounded-wedding-card max-w-4xl w-full max-h-[90vh] overflow-y-auto md:overflow-hidden shadow-2xl flex flex-col md:flex-row relative"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="w-full md:w-1/2 h-64 md:h-[500px]">
-                <img
-                  src={gambar1.src}
-                  alt={selectedProject.title}
-                  className="w-full h-full object-cover"
+              <div className="w-full md:w-1/2 h-64 md:h-[500px] relative">
+                <Image
+                  src={gambar1}
+                  alt={`Foto detail pernikahan – ${selectedProject.title}`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover"
                 />
               </div>
               <div className="flex-1 p-8 md:p-14 relative flex flex-col justify-center text-left">
                 <button
-                  className="absolute top-6 md:top-8 right-6 md:right-8 text-white/40 hover:text-white transition-colors"
+                  className="absolute top-6 md:top-8 right-6 md:right-8 text-white/40 hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-brand-gold rounded-full p-1"
+                  aria-label="Tutup detail proyek"
                   onClick={() => {
                     setSelectedProject(null);
                     setIsRotating(true);
                   }}
                 >
-                  <X size={28} strokeWidth={1} />
+                  <X size={28} strokeWidth={1} aria-hidden="true" />
                 </button>
                 <span className="text-[9px] md:text-[10px] font-display font-semibold uppercase tracking-[0.3em] mb-3 md:mb-4 text-brand-gold">
                   {selectedProject.category}
